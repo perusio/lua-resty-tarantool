@@ -28,6 +28,7 @@ local concat = table.concat
 local ngx = ngx
 local tcp = ngx.socket.tcp
 local sha1b = ngx.sha1_bin
+-- Debugging related functions.
 local log = ngx.log
 local ERR = ngx.ERR
 -- Generic Lua functions.
@@ -134,6 +135,21 @@ local indexes_id = {
     primary = 0,
     name = 2
   }
+}
+
+-- Iterator keys, i.e., codes that represent it in terms of the IProto
+-- protocol.
+local iterator_keys = {
+  EQ = 0, -- equality
+  REQ = 1, -- reverse equality
+  ALL = 2, -- all tuples in an index
+  LT = 3, -- less than
+  LE = 4, -- less than or equal
+  GE = 5, -- greater than or equal
+  GT = 6, -- greater than
+  BITSET_ALL_SET = 7, -- bits in the bitmask all set
+  BITSET_ANY_SET = 8, -- any of the bist in the bitmask are set
+  BITSET_ALL_NOT_SET = 9, -- none on the bits on the bitmask are set
 }
 
 -- Default options.
@@ -681,16 +697,17 @@ function M.select(self, space, index, key, opts)
     body[packet_keys.limit] = iproto.max_limit
   end
   -- Add the offset.
-  if opts.offset ~= nil then
-    body[packet_keys.offset] = tonumber(opts.offset)
+  if opts.offset and type(opts.offset) == 'number' then
+    body[packet_keys.offset] = opts.offset
   else
     body[packet_keys.offset] = 0
   end
   -- Add the iterator if specified.
-  if opts.iterator and type(opts.iterator) == 'number' then
-    body[packet_keys.iterator] = opts.iterator
+  if opts.iterator and iterator_keys[opts.iterator] ~= nil then
+    body[packet_keys.iterator] = iterator_keys[opts.iterator]
   else
-    body[packet_keys.iterator] = 0
+    -- If no valid iterator is specified then set it to 'EQ'.
+    body[packet_keys.iterator] = iterator_keys.EQ
   end
   -- Make the select request.
   local response, err = request(self,
@@ -874,13 +891,12 @@ end
 -- @param number|string|table key query key.
 -- @param table oplist upsert/update operator list. These values are
 --                     used for the update.
--- @param table default_values defaults for primary index and
---                             fields. These values are used for the
---                             insertion.
+-- @param table new_tuple tuple to be used as the record value when
+--                        inserting.
 --
 -- @return table.
---   Upserted record.
-function M.upsert(self, space, key, oplist, default_values)
+--   Currently returns an empty table if successful.
+function M.upsert(self, space, key, oplist, new_tuple)
   -- First get the space numeric id, i.e., what's the value of the
   -- space_id field in the space.
   local spaceid, err = get_space_id(self, space)
@@ -892,7 +908,7 @@ function M.upsert(self, space, key, oplist, default_values)
                                 { [packet_keys.type] = command_keys.upsert },
                                 { [packet_keys.space_id] = spaceid,
                                   [packet_keys.key] = prepare_key(key),
-                                  [packet_keys.tuple] = default_values,
+                                  [packet_keys.tuple] = new_tuple,
                                   [packet_keys.def_tuple] = prepare_op(oplist) })
   -- Handle the error if it occurs.
   if err then
