@@ -46,7 +46,7 @@ not Lua 5.1.
 ### Creating a connection
 
 ```lua
-local tnt = require 'resty.tarantool'
+local tar = require 'resty.tarantool'
 
 local tar, err = tnt:new({
     host = '127.0.0.1',
@@ -89,7 +89,7 @@ Connects the socket created above to the port and address specified
 when creating the connection object.
 
 ```lua
-tnt:connect()
+tar:connect()
 ```
 The function returns true if the connection succeeds, `nil` if not.
 
@@ -101,7 +101,7 @@ Makes the connection created get pushed to a connection pool so that
 the connection is kept alive across multiple requests.
 
 ```lua
-tnt:set_keepalive()
+tar:set_keepalive()
 ```
 
 The function returns true if the socket is successfully pushed to
@@ -115,7 +115,7 @@ Closes a connection to a given tarantool server running on a given
 address and port.
 
 ```lua
-tnt:disconnect()
+tar:disconnect()
 ```
 
 The function returns true if the connection is successfully closed. `nil` if not.
@@ -128,7 +128,7 @@ if it's available. If it's available for queries it returns the string
 `PONG`.
 
 ```lua
-tnt:ping()
+tar:ping()
 -- returns PONG
 ```
 
@@ -168,7 +168,7 @@ More details about iterators on the [tarantool manual](http://tarantool.org/doc/
 ##### Query the `_space` space (DB) to get the space id of the `_index` space.
 
 ```lua
-local res, err = tnt:select('_space', 'name', '_index')
+local res, err = tar:select('_space', 'name', '_index')
 
 -- response:
 [2881,"_index","memtx",0,"",
@@ -189,7 +189,7 @@ box.space._space.index.name:select{ '_index' }
 
 ```lua
 -- N.B. price is an index of the activities space.
-local res, err = tnt:select('activities', 'price', 300, { iterator = 'LT' })
+local res, err = tar:select('activities', 'price', 300, { iterator = 'LT' })
 ```
 The above request is equivalent to the console request:
 
@@ -209,7 +209,7 @@ The function returns the **inserted** record if the operation succeeds.
 #### insert examples
 
 ```lua
-local res, err = tnt:insert('activities', { 16, 120, { activity = 'surf', price = 121 } })
+local res, err = tar:insert('activities', { 16, 120, { activity = 'surf', price = 121 } })
 
 -- response: 
 [[16,120,{"activity":"surf","price":121}]]
@@ -236,7 +236,7 @@ operation to succeed. If the operations succeeds the record with the
 #### replace examples
 
 ```lua
-local res, err = tnt:replace('activities', { 16, 120, { activity = 'surf', price = 120 } })
+local res, err = tar:replace('activities', { 16, 120, { activity = 'surf', price = 120 } })
 -- response:
 [[16,120,{"activity":"surf","price":120}]]
 ```
@@ -279,7 +279,7 @@ it returns the **updated** record if the operation is successful.
 #### update examples
 
 ```lua
-local res, err = tnt:update('activities', 'primary', 16, { { '=', 2, 341 }, { '=', 3,  { activity = 'kitesurfing', price = 341 }}} )
+local res, err = tar:update('activities', 'primary', 16, { { '=', 2, 341 }, { '=', 3,  { activity = 'kitesurfing', price = 341 }}} )
 -- response:
 [16,341,{"activity":"kitesurfing","price":341}]]
 ```
@@ -307,7 +307,7 @@ operation is successful. If the operation is unsuccessful it returns `nil`.
 An **insert**.
 
 ```lua
-local res, err = tnt:upsert('activities', 17, { { '=', 2, 450 }, { '=', 3,  { activity = 'submarine tour 8', price = 450 }}}, { 17, 450, { activity = 'waterski', price = 365 }})
+local res, err = tar:upsert('activities', 17, { { '=', 2, 450 }, { '=', 3,  { activity = 'submarine tour 8', price = 450 }}}, { 17, 450, { activity = 'waterski', price = 365 }})
 -- response:
 {}
 ```
@@ -325,7 +325,7 @@ box.space.activities:upsert({ 17 }, { { '=', 2, 450 }, { '=', 3,  { activity = '
 An **update**.
 
 ```lua
-local res, err = tnt:upsert('activities', 17, { { '=', 2, 450 }, { '=', 3,  { activity = 'submarine tour 8', price = 450 }}}, { 18, 285, { activity = 'kitesurfing', price = 285 }})
+local res, err = tar:upsert('activities', 17, { { '=', 2, 450 }, { '=', 3,  { activity = 'submarine tour 8', price = 450 }}}, { 18, 285, { activity = 'kitesurfing', price = 285 }})
 -- response:
 {}
 ```
@@ -343,7 +343,7 @@ that `<key>` must belong to a primary (unique) index. It returns the
 #### delete examples
 
 ```lua
-local response, err = tnt:delete('activities', 17)
+local response, err = tar:delete('activities', 17)
 -- response:
 [17,450,{"activity":"waterski","price":365}]]
 ```
@@ -372,7 +372,7 @@ Since the tarantool console is a Lua REPL any function can be invoked
 as long as it is available in the environment.
 
 ```lua
-local res, err = tnt:call('table.concat', { {'hello', ' ', 'world' } })
+local res, err = tar:call('table.concat', { {'hello', ' ', 'world' } })
 -- response:
 [["hello world"]]
 ```
@@ -389,7 +389,7 @@ table.concat({'hello', ' ', 'world' })
 ```
 
 For many examples of tarantool stored procedures see the repository;
-https://github.com/mailru/tntlua
+https://github.com/mailru/tarlua
 
 ### hide\_version\_header
 
@@ -403,7 +403,7 @@ By default each response sends a custom HTTP header
 Invoking `hide_version_header` removes the header.
 
 ```lua
-tnt:hide_version_header()
+tar:hide_version_header()
 ```
 
 It returns no values.
