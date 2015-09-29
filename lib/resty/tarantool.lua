@@ -171,7 +171,7 @@ if reps > 0 and tonumber(mp_version) < 33 then
 end
 
 -- @table: module table.
-local M = { _VERSION = '0.1', _NAME = 'tarantool', _DESCRIPTION = 'resty Lua library for tarantool' }
+local M = { _VERSION = '0.2', _NAME = 'tarantool', _DESCRIPTION = 'resty Lua library for tarantool' }
 local mt = { __index = M }
 
 --- Create a connection object.
