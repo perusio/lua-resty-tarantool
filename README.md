@@ -391,7 +391,7 @@ table.concat({'hello', ' ', 'world' })
 For many examples of tarantool stored procedures see the repository;
 https://github.com/mailru/tntlua
 
-### hide_version_header
+### hide\_version\_header
 
     hide_version_header(<connection object>)
 
