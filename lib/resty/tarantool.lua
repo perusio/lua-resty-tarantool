@@ -149,7 +149,7 @@ local iterator_keys = {
   GT = 6, -- greater than
   BITSET_ALL_SET = 7, -- bits in the bitmask all set
   BITSET_ANY_SET = 8, -- any of the bist in the bitmask are set
-  BITSET_ALL_NOT_SET = 9, -- none on the bits on the bitmask are set
+  BITSET_ALL_NOT_SET = 9, -- none of the bits on the bitmask are set
 }
 
 -- Default options.
@@ -454,9 +454,11 @@ local function handshake(self)
   -- it is ok.
   local count, err = self.sock:getreusedtimes()
   -- Implementing the handshake of the IProto protocol.
-  -- @see http://tarantool.org/doc/dev_guide/box-protocol.html
+  -- @see http://tarantool.org/doc/dev_guide/box-protocol.html.
   --
   local greeting, greeting_err
+  -- If we're creating a new connection instead of reusing an old one
+  -- comming from the connection pool, i.e., keepalive.
   if count == 0 then
     -- 1. Getting a greeting packet from the server.
     greeting, greeting_err = self.sock:receive(iproto.greeting_size)
@@ -481,7 +483,7 @@ local function handshake(self)
     -- Proceed to authenticate now.
     return authenticate(self)
   end
-  -- Return true if the handshake succeeded.
+  -- Return true if we're reusing a socket (keepalive).
   return true
 end
 
@@ -689,7 +691,6 @@ function M.select(self, space, index, key, opts)
   body[packet_keys.space_id] = spaceid
   body[packet_keys.index_id] = indexid
   body[packet_keys.key] = prepare_key(key)
-
   -- Add the limit.
   if opts.limit ~= nil then
     body[packet_keys.limit] = tonumber(opts.limit)
