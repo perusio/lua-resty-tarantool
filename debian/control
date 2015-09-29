@@ -1,0 +1,27 @@
+Source: lua-resty-tarantool
+Section: interpreters
+Priority: optional
+Maintainer: António P. P. Almeida <appa@perusio.net> 
+Uploaders: António P. P. Almeida <appa@perusio.net>
+Build-Depends: debhelper (>= 9), dh-lua
+Standards-Version: 3.9.6
+Homepage: https://github.com/perusio/lua-resty-tarantool
+Vcs-Git: git@github.com:perusio/lua-resty-tarantool.git
+Vcs-Browser: https://github.com/perusio/lua-resty-tarantool
+
+Package: lua-resty-tarantool
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, nginx
+Description: Library to work with the tarantool NoSQL database
+ based on the cosocket driver for the nginx embedded Lua language
+ module.
+ .
+ Because this module is based on the ngx_lua's cosocket API, it inherits
+ the advantage of a real nonblocking behaviour running effectively on the
+ underlying nginx server ultra-fast technology design, allowing Web
+ developers making use of the Lua programming language to script and
+ construct extremely high-performance web applications capable to handle
+ 10K+ connections.
+ . 
+ Note that this module works for both nginx witth the embedded Lua
+ module and the OpenResty bundle.
