@@ -1,19 +1,5 @@
-lua-resty-upload (0.09-perusio.1.2) unstable; urgency=medium
+lua-resty-tarantool (0.1-perusio.1.0) unstable; urgency=medium
 
-  * git-buildpackage layout.
-
- -- António P. P. Almeida <appa@perusio.net>  Tue, 09 Jun 2015 18:48:38 +0200
-
-lua-resty-upload (0.09-perusio.1.1) unstable; urgency=medium
-
-  * Fixed path in Lua library. Added sources mangling to dh-lua.conf.
-
- -- António P. P. Almeida <appa@perusio.net>  Thu, 16 Apr 2015 12:05:55 +0200
-
-lua-resty-upload (0.09-perusio.1.0) unstable; urgency=medium
-
-  * Imported Upstream version 0.09.
-  * debian/control: Added Vcs tags.
   * First Debian package build.
-  
- -- António P. P. Almeida <appa@perusio.net>  Wed, 15 Apr 2015 16:40:07 +0200
+
+ -- António P. P. Almeida <appa@perusio.net>  Wed, 30 Sep 2015 01:55:01 +0200
