@@ -5,7 +5,7 @@
 This is a library to connect to the [tarantool](http://tarantool.org)
 NoSQL database. This database has very interesting features that make
 it be sort of a bridge between a traditional SQL based database and
-document oriented storages like [http://couchdb.org](CouchDB).
+document oriented storages like [CouchDB](http://couchdb.org).
 
 It's a fork of another
 [project](https://github.com/ziontab/lua-nginx-tarantool) that I was
@@ -23,6 +23,19 @@ it. Specifically when specifying the operators to use for the `update`
 or `upsert` operations.
 
 ## Installation
+
+### OpenResty
+
+If you're using [OpenResty](http://openresty.org) the library should
+be installed under: `/usr/local/openresty/lualib/resty`.
+
+### Debian package
+
+I package the library for debian
+[here](https://debian.perusio.net). Just follow the instructions there
+and install it.
+
+### adhoc installation
 
 Put the library in a place in your filesystem that you deem
 appropriate. Don't forget to adjust the Lua package path, either by
@@ -410,5 +423,4 @@ It returns no values.
 
 ## TODO
 
- 1. Debian package.
- 2. Tests.
+ * Test setup.
