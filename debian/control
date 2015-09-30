@@ -6,7 +6,7 @@ Uploaders: António P. P. Almeida <appa@perusio.net>
 Build-Depends: debhelper (>= 9), dh-lua
 Standards-Version: 3.9.6
 Homepage: https://github.com/perusio/lua-resty-tarantool
-Vcs-Git: git@github.com:perusio/lua-resty-tarantool.git
+Vcs-Git: git://git@github.com:perusio/lua-resty-tarantool.git
 Vcs-Browser: https://github.com/perusio/lua-resty-tarantool
 
 Package: lua-resty-tarantool
