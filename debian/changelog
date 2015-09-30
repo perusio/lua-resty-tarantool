@@ -1,4 +1,4 @@
-lua-resty-tarantool (0.2-perusio.1.2) unstable; urgency=medium
+lua-resty-tarantool (0.2-perusio.1.0) unstable; urgency=medium
 
   * New upstream version.
 
