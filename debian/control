@@ -22,6 +22,7 @@ Description: Library to work with the tarantool NoSQL database
  developers making use of the Lua programming language to script and
  construct extremely high-performance web applications capable to handle
  10K+ connections.
- . 
+ .
  Note that this module works for both nginx witth the embedded Lua
  module and the OpenResty bundle.
+
