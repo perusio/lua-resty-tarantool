@@ -1,3 +1,9 @@
+lua-resty-tarantool (0.2-perusio.1.1) unstable; urgency=medium
+
+  * Fixed lintian errors.
+
+ -- António P. P. Almeida <appa@perusio.net>  Wed, 30 Sep 2015 02:35:39 +0200
+
 lua-resty-tarantool (0.2-perusio.1.0) unstable; urgency=medium
 
   * New upstream version.
