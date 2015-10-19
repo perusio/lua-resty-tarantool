@@ -176,8 +176,8 @@ local mt = { __index = M }
 
 --- Create a connection object.
 --
--- @param table self connection object.
--- @param table params connection parameters.
+-- @param self table connection object.
+-- @param params table connection parameters.
 --
 -- @return table
 --   The connection object.
@@ -235,7 +235,7 @@ end
 
 --- Pushes a socket into a connection pool to keep it alive.
 --
--- @param table self connection object.
+-- @param self table connection object.
 --
 -- @return boolean
 --   true if successful.
@@ -254,8 +254,8 @@ end
 
 --- Set the timeout for the operations on a socket.
 --
--- @param table self connection object.
--- @param integer timeout in ms.
+-- @param self table connection object.
+-- @param timeout integer in ms.
 --
 -- @return boolean
 --   true if successful, false if not.
@@ -270,8 +270,8 @@ end
 
 --- XORs two given strings
 --
--- @param string str1 string 1 to XOR.
--- @param string str2 string 2 to XOR.
+-- @param str1 string string 1 to XOR.
+-- @param str2 string string 2 to XOR.
 --
 -- @return string
 --   XORed strings.
@@ -292,8 +292,8 @@ end
 
 --- Serialize the request message using MsgPack.
 --
--- @param table header request header.
--- @param table body request body.
+-- @param header table request header.
+-- @param body table request body.
 --
 -- @return string
 --   Serialized request messge using MsgPack.
@@ -308,7 +308,7 @@ end
 --- Serialize the request message using MsgPack.
 --  for messages with no body (ping).
 --
--- @param table header request header.
+-- @param header table request header.
 --
 -- @return string
 --   Serialized request messge using MsgPack.
@@ -319,9 +319,9 @@ end
 
 --- Issue a request to tarantool.
 --
--- @param table self connection object.
--- @param table header request header.
--- @param table body request body (payload).
+-- @param self table connection object.
+-- @param header table request header.
+-- @param body table request body (payload).
 --
 -- @return table or nil, string.
 --  A table with the response or other wise if there's an error.
@@ -410,8 +410,8 @@ end
 
 --- Perform the authentication with the tarantool server.
 --
--- @param table self object representing the current connection with
---                all the parameters.
+-- @param self table object representing the current connection with
+--             all the parameters.
 --
 -- @return boolean or nil, string
 --   If the authentication succeeds return true, if not nil and the
@@ -444,7 +444,7 @@ end
 
 --- Performs the handshake of the IProto protocol.
 --
--- @param table self connection object.
+-- @param self table connection object.
 --
 -- @return boolean or nil, string
 --   True if the handshake works. Signal an error if doesn't.
@@ -489,9 +489,9 @@ end
 
 --- Connect to the server using the created cosocket.
 --
--- @param table self connection object.
--- @param string host connecting to.
--- @param integer port on this port.
+-- @param self table connection object.
+-- @param host string connecting to.
+-- @param port integer on this port.
 --
 -- @return boolean or nil
 --   true if the connection suceeds, nil if not.
@@ -511,7 +511,7 @@ end
 
 --- Performs a PING type request to the server.
 --
--- @param table self connection object.
+-- @param self table connection object.
 --
 -- @return string
 --   'PONG' if request is successful.
@@ -534,7 +534,7 @@ end
 --- Sets the flag that signals to not send the
 --  Tarantool version as a custom header.
 --
--- @param table self connection object.
+-- @param self table connection object.
 --
 -- @return nothing0
 --   Side effects only.
@@ -544,8 +544,8 @@ end
 
 --- Finds a space numeric id to be used in the IProto packets.
 --
--- @param table self connection object.
--- @param string space space id (name).
+-- @param self table connection object.
+-- @param space string space id (name).
 --
 -- @return integer
 --   Space numeric id.
@@ -593,8 +593,8 @@ end
 
 --- Finds a space numeric id to be used in the IProto packets.
 --
--- @param table self connection object.
--- @param string space space id (name).
+-- @param self table connection object.
+-- @param space string space id (name).
 -- @param index index index id (name).
 --
 -- @return integer
@@ -663,11 +663,11 @@ end
 
 --- Performs a select operation on given space with the given index.
 --
--- @param table self connection object
--- @param string space space name.
--- @param string index index name.
--- @param table|string|number!ni key query key.
--- @param table opts update operations list.
+-- @param self table connection object
+-- @param space string space name.
+-- @param index string index name.
+-- @param key mixed query key.
+-- @param opts table update operations list.
 --
 -- @return table
 --   Select query result if successful.
@@ -727,11 +727,11 @@ end
 
 --- Issue a insert or replace command to the tarantool DB.
 --
--- @param table self connection object.
--- @param string space space name.
--- @param table tuple values to be inserted/replaced
+-- @param self table connection object.
+-- @param space string space name.
+-- @param tuple table values to be inserted/replaced
 --              (indexes, field_values).
--- @param string action  insert or replace.
+-- @param action string  insert or replace.
 --
 -- @return table
 --   Request data response.
@@ -760,9 +760,9 @@ end
 
 --- Inserts a given set of values specified by a tuple.
 --
--- @param table self connection object.
--- @param string space space name.
--- @param table tuple (indexes, field_values).
+-- @param self table connection object.
+-- @param space string space name.
+-- @param tuple table (indexes, field_values).
 --
 -- @return table
 --   Inserted record.
@@ -786,9 +786,9 @@ end
 --- Deletes a given tuple (record) from a space (DB). Note that the key
 --  specified must belong to a primary index, i.e., is unique.
 --
--- @param table self connection object.
--- @param string space space name.
--- @param number|string|table key query key.
+-- @param self table connection object.
+-- @param space string space name.
+-- @param key mixed query key.
 --
 -- @return table.
 --   The deleted record.
@@ -818,7 +818,7 @@ end
 --- Massages the operator list for the update operation
 --  so that the field numbers are the same as in the console.
 --
--- @param table oplist operator list.
+-- @param oplist table operator list.
 --
 -- @return table
 --   Massaged operator list.
@@ -886,11 +886,11 @@ end
 --  specified must belong to a primary index, i.e., is unique.
 --  Upsert means update if it exists, insert if not.
 --
--- @param table self connection object.
--- @param string space space name.
--- @param number|string index index identifier.
--- @param number|string|table key query key.
--- @param table oplist upsert/update operator list. These values are
+-- @param self table connection object.
+-- @param space string space name.
+-- @param index mixed index identifier.
+-- @param key mixed query key.
+-- @param oplist table upsert/update operator list. These values are
 --                     used for the update.
 -- @param table new_tuple tuple to be used as the record value when
 --                        inserting.
@@ -924,9 +924,9 @@ end
 
 --- Executes a stored procedure (Lua function) in a tarantool server.
 --
--- @param table self connection object.
--- @param string proc function name.
--- @param table args function arguments.
+-- @param self table connection object.
+-- @param proc string function name.
+-- @param args table function arguments.
 --
 -- @return table
 --   Result of the stored procedure invocation.
