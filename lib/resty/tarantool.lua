@@ -1,5 +1,5 @@
 --
--- @file   tarantool.lua
+-- @module tarantool.lua
 -- @author António P. P. Almeida <appa@perusio.net>
 -- @date   Mon Sep 21 19:47:05 2015
 --
@@ -170,7 +170,7 @@ if reps > 0 and tonumber(mp_version) < 33 then
   mp.set_integer('unsigned')
 end
 
--- @table: module table.
+-- @table module table.
 local M = { _VERSION = '0.2', _NAME = 'tarantool', _DESCRIPTION = 'resty Lua library for tarantool' }
 local mt = { __index = M }
 
@@ -319,6 +319,8 @@ end
 
 --- Issue a request to tarantool.
 --
+-- @local
+--
 -- @param self table connection object.
 -- @param header table request header.
 -- @param body table request body (payload).
@@ -411,7 +413,9 @@ end
 --- Perform the authentication with the tarantool server.
 --
 -- @param self table object representing the current connection with
---             all the parameters.
+--   all the parameters.
+--
+-- @local
 --
 -- @return boolean or nil, string
 --   If the authentication succeeds return true, if not nil and the
@@ -443,6 +447,8 @@ local function authenticate(self)
 end
 
 --- Performs the handshake of the IProto protocol.
+--
+-- @local
 --
 -- @param self table connection object.
 --
@@ -544,6 +550,8 @@ end
 
 --- Finds a space numeric id to be used in the IProto packets.
 --
+-- @local
+--
 -- @param self table connection object.
 -- @param space string space id (name).
 --
@@ -592,6 +600,8 @@ local function get_space_id(self, space)
 end
 
 --- Finds a space numeric id to be used in the IProto packets.
+--
+-- @local
 --
 -- @param self table connection object.
 -- @param space string space id (name).
@@ -646,6 +656,8 @@ end
 
 --- Transforms the given argument into a table if it's not already
 --  one. IProto key field, an array.
+--
+-- @local
 --
 -- @param table|string|number!nil value the value to be used as query
 --                                key.
@@ -726,6 +738,8 @@ function M.select(self, space, index, key, opts)
 end
 
 --- Issue a insert or replace command to the tarantool DB.
+--
+-- @local
 --
 -- @param self table connection object.
 -- @param space string space name.
@@ -817,6 +831,8 @@ end
 
 --- Massages the operator list for the update operation
 --  so that the field numbers are the same as in the console.
+--
+-- @local
 --
 -- @param oplist table operator list.
 --
