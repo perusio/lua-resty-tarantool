@@ -6,7 +6,7 @@
 -- @brief  OpenResty module for talking to tarantool.
 --
 --
---
+-- @alias M
 
 -- MessagePack handling.
 local mp = require 'MessagePack'
