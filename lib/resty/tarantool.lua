@@ -326,7 +326,7 @@ end
 -- @param body table request body (payload).
 --
 -- @return table or nil, string.
---  A table with the response or other wise if there's an error.
+--  A table with the response or otherwise if there's an error.
 local function request(self, header, body)
   local sock = self.sock
   local htype = type(header)
@@ -407,7 +407,8 @@ local function request(self, header, body)
   -- Return the response as a table with the data and the metadata.
   return { code = response_header[packet_keys.type],
            data = response_body[packet_keys.data],
-           error = response_body[packet_keys.error] }
+           error = response_body[packet_keys.error],
+         }
 end
 
 --- Perform the authentication with the tarantool server.
@@ -529,11 +530,13 @@ function M.ping(self)
   elseif response and response.code ~= response_keys.ok then
     return nil, response and response.error or 'Internal error.'
   else
-    local response = 'PONG'
     -- Set the headers properly.
+    local response = 'PONG'
+    -- We need to add the \r\n at the end, hence add 1 to the string
+    -- length.
+    ngx.header['Content-Length'] = slen(response) + 1
     ngx.header['Content-Type'] = 'text/plain'
-    ngx.header['Content-Length'] = slen(response)
-    return response
+    return 'PONG'
   end
 end
 
@@ -659,8 +662,8 @@ end
 --
 -- @local
 --
--- @param table|string|number!nil value the value to be used as query
---                                key.
+-- @param table mixed value the value to be used as query
+--              key.
 -- @return table
 --  Given value in a table.
 local function prepare_key(value)
@@ -861,8 +864,8 @@ end
 --
 -- @param table self connection object.
 -- @param string space space name.
--- @param number|string index index identifier.
--- @param number|string|table key query key.
+-- @param number number or string index index identifier.
+-- @param number number or string key query key.
 -- @param table oplist update operator list.
 --
 -- @return table.
@@ -952,6 +955,32 @@ function M.call(self, proc, args)
                                 { [packet_keys.type] = command_keys.call },
                                 { [packet_keys.function_name] = proc,
                                   [packet_keys.tuple] = args } )
+  -- Handle the error if it occurs.
+  if err then
+    return nil, err
+  elseif response and response.code ~= response_keys.ok then
+    return nil, response and response.error or 'Internal error.'
+  else
+    -- Return the response data.
+    return response.data
+  end
+end
+
+--- Performs an eval operation in the tarantool server. I.e., it
+--  evaluates the given Lua code an returns the result in a tuple.
+--
+-- @param self table connection object
+-- @param exp string containing the Lua expression to be evaluated.
+-- @param result table the tuple where the result will be returned.
+--
+-- @return table
+--   If the Lua code evaluation was successful.
+function M.eval(self, exp, result)
+  -- Issue the request.
+  local response, err = request(self,
+                                { [packet_keys.type] = command_keys.eval },
+                                { [packet_keys.expression] = exp,
+                                  [packet_keys.tuple] = result } )
   -- Handle the error if it occurs.
   if err then
     return nil, err
