@@ -1,19 +1,23 @@
---
+--- Module for working with tarantool in OpenResty or nginx with
+--  embedded Lua
 -- @module tarantool.lua
 -- @author António P. P. Almeida <appa@perusio.net>
--- @date   Mon Sep 21 19:47:05 2015
---
--- @brief  OpenResty module for talking to tarantool.
---
---
+-- @license MIT
 -- @alias M
+
+-- Bit operations. Try to use the LuaJIT bit operations package.
+local ok_bit, bit = pcall(require, 'bit')
+-- If in Lua 5.2 use the bit32 package.
+if not ok_bit and _VERSION == 'Lua 5.2' then
+  bit = require 'bit32'
+elseif not ok_bit then
+  return nil, 'Bitwise operator support missing.'
+end
 
 -- MessagePack handling.
 local mp = require 'MessagePack'
--- Get the LuaJIT bit operations package.
-local bit = require 'bit'
 
--- Some local definitions.
+--- Some local definitions.
 -- String functions.
 local sub = string.sub
 local gsub = string.gsub
@@ -170,8 +174,8 @@ if reps > 0 and tonumber(mp_version) < 33 then
   mp.set_integer('unsigned')
 end
 
--- @table module table.
-local M = { _VERSION = '0.2', _NAME = 'tarantool', _DESCRIPTION = 'resty Lua library for tarantool' }
+--- Module table.
+local M = { _VERSION = '0.3.1', _NAME = 'tarantool', _DESCRIPTION = 'resty Lua library for tarantool' }
 local mt = { __index = M }
 
 --- Create a connection object.
@@ -222,7 +226,7 @@ end
 
 --- Closes a socket.
 --
--- @param table self connection object.
+-- @param self table connection object.
 --
 -- @return boolean
 --   true if the closing is successful.
@@ -539,7 +543,7 @@ end
 --
 -- @param self table connection object.
 --
--- @return nothing0
+-- @return nothing
 --   Side effects only.
 function M.hide_version_header(self)
   self.show_version_header = false
@@ -656,7 +660,7 @@ end
 --
 -- @local
 --
--- @param table mixed value the value to be used as query
+-- @param value mixed the value to be used as query
 --              key.
 -- @return table
 --  Given value in a table.
@@ -783,9 +787,9 @@ end
 
 --- Replaces a given set of values specified by a tuple.
 --
--- @param table self connection object.
--- @param string space space name.
--- @param table tuple (indexes, field_values). The indexes have to
+-- @param self table connection object.
+-- @param space string space name.
+-- @param tuple table (indexes, field_values). The indexes have to
 --              match an existing record (tuple).
 --
 -- @return table
@@ -795,8 +799,7 @@ function M.replace(self, space, tuple)
 end
 
 --- Deletes a given tuple (record) from a space (DB). Note that the key
---  specified must belong to a primary index, i.e., is unique.
---
+--  specified must belong to a primary index or any other unique index.
 -- @param self table connection object.
 -- @param space string space name.
 -- @param key mixed query key.
@@ -854,13 +857,13 @@ local function prepare_op(oplist)
 end
 
 --- Updates a given tuple (record) in a space (DB). Note that the key
--- specified must belong to a primary index, i.e., is unique.
+-- specified must belong to a primary index or any other unique index.
 --
--- @param table self connection object.
--- @param string space space name.
--- @param number number or string index index identifier.
--- @param number number or string key query key.
--- @param table oplist update operator list.
+-- @param self table connection object.
+-- @param space string space name.
+-- @param index number or string index identifier.
+-- @param key number or string query key.
+-- @param oplist table update operator list.
 --
 -- @return table.
 --   Updated or upserted record.
@@ -896,17 +899,16 @@ function M.update(self, space, index, key, oplist)
 end
 
 --- Upserts a given tuple (record) in a space (DB). Note that the key
---  specified must belong to a primary index, i.e., is unique.
---  Upsert means update if it exists, insert if not.
+--  specified must belong to a primary index or any other unique
+--  index. Upsert means update if it exists, insert if not.
 --
 -- @param self table connection object.
 -- @param space string space name.
--- @param index mixed index identifier.
 -- @param key mixed query key.
 -- @param oplist table upsert/update operator list. These values are
---                     used for the update.
--- @param table new_tuple tuple to be used as the record value when
---                        inserting.
+--        used for the update.
+-- @param new_tuple table tuple to be used as the record value when
+--        inserting.
 --
 -- @return table.
 --   Currently returns an empty table if successful.
@@ -961,7 +963,7 @@ function M.call(self, proc, args)
 end
 
 --- Performs an eval operation in the tarantool server. I.e., it
---  evaluates the given Lua code an returns the result in a tuple.
+--  evaluates the given Lua code and returns the result in a tuple.
 --
 -- @param self table connection object
 -- @param exp string containing the Lua expression to be evaluated.
