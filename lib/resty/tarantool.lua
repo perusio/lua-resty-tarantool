@@ -530,12 +530,6 @@ function M.ping(self)
   elseif response and response.code ~= response_keys.ok then
     return nil, response and response.error or 'Internal error.'
   else
-    -- Set the headers properly.
-    local response = 'PONG'
-    -- We need to add the \r\n at the end, hence add 1 to the string
-    -- length.
-    ngx.header['Content-Length'] = slen(response) + 1
-    ngx.header['Content-Type'] = 'text/plain'
     return 'PONG'
   end
 end
