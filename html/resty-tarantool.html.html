@@ -1,0 +1,619 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>tarantool.lua</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>tarantool.lua</code></h1>
+<p>Module for working with tarantool in OpenResty or nginx with
+  embedded Lua</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>License</strong>: MIT</li>
+        <li><strong>Author</strong>: António P. P. Almeida <appa@perusio.net></li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (self, params)</a></td>
+	<td class="summary">Create a connection object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#disconnect">disconnect (self)</a></td>
+	<td class="summary">Closes a socket.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set_keepalive">set_keepalive (self)</a></td>
+	<td class="summary">Pushes a socket into a connection pool to keep it alive.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set_timeout">set_timeout (self, timeout)</a></td>
+	<td class="summary">Set the timeout for the operations on a socket.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#connect">connect (self, host, port)</a></td>
+	<td class="summary">Connect to the server using the created cosocket.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ping">ping (self)</a></td>
+	<td class="summary">Performs a PING type request to the server.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#hide_version_header">hide_version_header (self)</a></td>
+	<td class="summary">Sets the flag that signals to not send the
+  Tarantool version as a custom header.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#select">select (self, space, index, key, opts)</a></td>
+	<td class="summary">Performs a select operation on given space with the given index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#insert">insert (self, space, tuple)</a></td>
+	<td class="summary">Inserts a given set of values specified by a tuple.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#replace">replace (self, space, tuple)</a></td>
+	<td class="summary">Replaces a given set of values specified by a tuple.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#delete">delete (self, space, key)</a></td>
+	<td class="summary">Deletes a given tuple (record) from a space (DB).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update (self, space, index, key, oplist)</a></td>
+	<td class="summary">Updates a given tuple (record) in a space (DB).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#upsert">upsert (self, space, key, oplist, new_tuple)</a></td>
+	<td class="summary">Upserts a given tuple (record) in a space (DB).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#call">call (self, proc, args)</a></td>
+	<td class="summary">Executes a stored procedure (Lua function) in a tarantool server.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#eval">eval (self, exp, result)</a></td>
+	<td class="summary">Performs an eval operation in the tarantool server.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (self, params)</strong>
+    </dt>
+    <dd>
+    Create a connection object.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">params</span>
+         table connection parameters.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table
+   The connection object.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "disconnect"></a>
+    <strong>disconnect (self)</strong>
+    </dt>
+    <dd>
+    Closes a socket.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        boolean
+   true if the closing is successful.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "set_keepalive"></a>
+    <strong>set_keepalive (self)</strong>
+    </dt>
+    <dd>
+    Pushes a socket into a connection pool to keep it alive.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        boolean
+   true if successful.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "set_timeout"></a>
+    <strong>set_timeout (self, timeout)</strong>
+    </dt>
+    <dd>
+    Set the timeout for the operations on a socket.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">timeout</span>
+         integer in ms.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        boolean
+   true if successful, false if not.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "connect"></a>
+    <strong>connect (self, host, port)</strong>
+    </dt>
+    <dd>
+    Connect to the server using the created cosocket.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">host</span>
+         string connecting to.
+        </li>
+        <li><span class="parameter">port</span>
+         integer on this port.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        boolean or nil
+   true if the connection suceeds, nil if not.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ping"></a>
+    <strong>ping (self)</strong>
+    </dt>
+    <dd>
+    Performs a PING type request to the server.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        string
+   'PONG' if request is successful.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "hide_version_header"></a>
+    <strong>hide_version_header (self)</strong>
+    </dt>
+    <dd>
+    Sets the flag that signals to not send the
+  Tarantool version as a custom header.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        nothing
+   Side effects only.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "select"></a>
+    <strong>select (self, space, index, key, opts)</strong>
+    </dt>
+    <dd>
+    Performs a select operation on given space with the given index.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object
+        </li>
+        <li><span class="parameter">space</span>
+         string space name.
+        </li>
+        <li><span class="parameter">index</span>
+         string index name.
+        </li>
+        <li><span class="parameter">key</span>
+         mixed query key.
+        </li>
+        <li><span class="parameter">opts</span>
+         table update operations list.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table
+   Select query result if successful.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "insert"></a>
+    <strong>insert (self, space, tuple)</strong>
+    </dt>
+    <dd>
+    Inserts a given set of values specified by a tuple.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">space</span>
+         string space name.
+        </li>
+        <li><span class="parameter">tuple</span>
+         table (indexes, field_values).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table
+   Inserted record.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "replace"></a>
+    <strong>replace (self, space, tuple)</strong>
+    </dt>
+    <dd>
+    Replaces a given set of values specified by a tuple.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">space</span>
+         string space name.
+        </li>
+        <li><span class="parameter">tuple</span>
+         table (indexes, field_values). The indexes have to
+              match an existing record (tuple).
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table
+   Record with the replaced values.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "delete"></a>
+    <strong>delete (self, space, key)</strong>
+    </dt>
+    <dd>
+    Deletes a given tuple (record) from a space (DB).  Note that the key
+  specified must belong to a primary index or any other unique index.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">space</span>
+         string space name.
+        </li>
+        <li><span class="parameter">key</span>
+         mixed query key.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table.
+   The deleted record.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (self, space, index, key, oplist)</strong>
+    </dt>
+    <dd>
+    Updates a given tuple (record) in a space (DB).  Note that the key
+ specified must belong to a primary index or any other unique index.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">space</span>
+         string space name.
+        </li>
+        <li><span class="parameter">index</span>
+         number or string index identifier.
+        </li>
+        <li><span class="parameter">key</span>
+         number or string query key.
+        </li>
+        <li><span class="parameter">oplist</span>
+         table update operator list.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table.
+   Updated or upserted record.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "upsert"></a>
+    <strong>upsert (self, space, key, oplist, new_tuple)</strong>
+    </dt>
+    <dd>
+    Upserts a given tuple (record) in a space (DB).  Note that the key
+  specified must belong to a primary index or any other unique
+  index. Upsert means update if it exists, insert if not.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">space</span>
+         string space name.
+        </li>
+        <li><span class="parameter">key</span>
+         mixed query key.
+        </li>
+        <li><span class="parameter">oplist</span>
+         table upsert/update operator list. These values are
+        used for the update.
+        </li>
+        <li><span class="parameter">new_tuple</span>
+         table tuple to be used as the record value when
+        inserting.
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table.
+   Currently returns an empty table if successful.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "call"></a>
+    <strong>call (self, proc, args)</strong>
+    </dt>
+    <dd>
+    Executes a stored procedure (Lua function) in a tarantool server.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object.
+        </li>
+        <li><span class="parameter">proc</span>
+         string function name.
+        </li>
+        <li><span class="parameter">args</span>
+         table function arguments.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table
+   Result of the stored procedure invocation.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "eval"></a>
+    <strong>eval (self, exp, result)</strong>
+    </dt>
+    <dd>
+    Performs an eval operation in the tarantool server.  I.e., it
+  evaluates the given Lua code and returns the result in a tuple.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         table connection object
+        </li>
+        <li><span class="parameter">exp</span>
+         string containing the Lua expression to be evaluated.
+        </li>
+        <li><span class="parameter">result</span>
+         table the tuple where the result will be returned.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        table
+   If the Lua code evaluation was successful.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
