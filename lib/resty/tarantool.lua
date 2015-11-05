@@ -746,7 +746,7 @@ end
 -- @param space string space name.
 -- @param tuple table values to be inserted/replaced
 --              (indexes, field_values).
--- @param action string  insert or replace.
+-- @param action string insert or replace.
 --
 -- @return table
 --   Request data response.

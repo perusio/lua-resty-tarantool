@@ -59,13 +59,13 @@ not Lua 5.1.
 ### Creating a connection
 
 ```lua
-local tar = require 'resty.tarantool'
+local tnt = require 'resty.tarantool'
 
 local tar, err = tnt:new({
     host = '127.0.0.1',
     port = 3301,
     user = 'luser',
-    password = 'some password',
+    password = 'some_password',
     socket_timeout = 2000,
 })
 ```
@@ -182,6 +182,8 @@ More details about iterators on the [tarantool manual](http://tarantool.org/doc/
 
 ```lua
 local res, err = tar:select('_space', 'name', '_index')
+
+if err then return ngx.say(err) end
 
 -- response:
 [2881,"_index","memtx",0,"",
@@ -385,7 +387,7 @@ Since the tarantool console is a Lua REPL any function can be invoked
 as long as it is available in the environment.
 
 ```lua
-local res, err = tar:call('table.concat', { {'hello', ' ', 'world' } })
+local res, err = tar:call('table.concat', {{ 'hello', ' ', 'world' }})
 -- response:
 [["hello world"]]
 ```
@@ -398,11 +400,34 @@ concatenate the table:
 The above request is equivalent to the console request:
 
 ```lua
-table.concat({'hello', ' ', 'world' })
+table.concat({ 'hello', ' ', 'world' })
 ```
 
 For many examples of tarantool stored procedures see the repository;
 https://github.com/mailru/tarlua
+
+### eval
+
+    eval(<connection object>, <expression>, <return object>)
+
+Invokes the tarantool embedded Lua interpreter to evaluate the given
+`<expression>` and returns the result in the `<return object>`, which
+is usually just an empty table `{ }`.
+
+### eval examples
+
+```lua
+local res, err = tar:eval('return 23 * 20', { })
+-- response:
+[460]
+```
+we invoked the interpreter to evaluate the Lua expression:
+
+```lua
+return 23 * 20
+```
+
+which is also the equivalent tarantool console request.
 
 ### hide\_version\_header
 
