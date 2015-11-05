@@ -14,8 +14,8 @@ Package: lua-resty-tarantool
 Architecture: all
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         nginx,
-         lua-bitop
+         nginx (>= 1.9.0-perusio.1.0) | nginx-extras,
+         lua-bitop | liblua5.2-0
 Description: Library to work with the tarantool NoSQL database
  based on the cosocket driver for the nginx embedded Lua language
  module.
@@ -27,5 +27,5 @@ Description: Library to work with the tarantool NoSQL database
  construct extremely high-performance web applications capable to handle
  10K+ connections.
  .
- Note that this module works for both nginx witth the embedded Lua
+ Note that this module works for both nginx with the embedded Lua
  module and the OpenResty bundle.
