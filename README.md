@@ -13,7 +13,7 @@ unhappy with. It's abundantly documented and is update regarding the
 tarantool API. Notably wtih support for the
 [upsert](https://github.com/tarantool/tarantool/issues/905) command. 
 
-Another thing to bear in minf is that the library tries to be
+Another thing to bear in mind is that the library tries to be
 consistent between the way the `update` and `upsert` commands are
 issued in the console using Lua and the way the API works. Notably the
 field numbers. In the console a field number takes into account the
