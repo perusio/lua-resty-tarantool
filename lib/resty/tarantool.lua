@@ -167,6 +167,7 @@ local defaults = {
   port = 3301,
   password = '',
   socket_timeout = 5000, -- ms
+  call_semantics = 'old',
 }
 
 -- Lua pattern used to extract the version number from the server
@@ -201,6 +202,7 @@ function M.new(self, params)
     socket_timeout = defaults.socket_timeout,
     -- If true it sends a custom header with the tarantool version.
     show_version_header = true,
+    call_semantics = defaults.call_semantics,
   }
   -- Loop over the given parameters and assign the values accordingly.
   if params and type(params) == 'table' then
@@ -942,20 +944,19 @@ function M.upsert(self, space, key, oplist, new_tuple)
   end
 end
 
---- Helper function for `call` methods that accepts the command key as
--- additional argument.
+--- Executes a stored procedure (Lua function) in a tarantool server.
+-- Uses the new (0x0a) command, which does not wrap each return value in a table.
 --
--- @tparam connection self connection object.
--- @tparam number command_key the command key to use for the request.
--- @tparam string proc function name.
--- @tparam table args function arguments.
+-- @param self table connection object.
+-- @param proc string function name.
+-- @param args table function arguments.
 --
 -- @return table
 --   Result of the stored procedure invocation.
-function M._call(self, command_key, proc, args)
+function M.call(self, proc, args)
   -- Issue the request.
   local response, err = request(self,
-                                { [packet_keys.type] = command_key },
+                                { [packet_keys.type] = command_keys.call[self.call_semantics] or error('Incorrect value for "call_semantics" option') },
                                 { [packet_keys.function_name] = proc,
                                   [packet_keys.tuple] = args } )
   -- Handle the error if it occurs.
@@ -967,33 +968,6 @@ function M._call(self, command_key, proc, args)
     -- Return the response data.
     return response.data
   end
-end
-
---- Executes a stored procedure (Lua function) in a tarantool server.
--- Uses the old (0x06) command, which wraps each return value in a table.
---
--- @param self table connection object.
--- @param proc string function name.
--- @param args table function arguments.
---
--- @return table
---   Result of the stored procedure invocation.
-function M.call(self, proc, args)
-  return self._call(self, command_keys.call.old, proc, args)
-end
-
-
---- Executes a stored procedure (Lua function) in a tarantool server.
--- Uses the new (0x0a) command, which does not wrap each return value in a table.
---
--- @param self table connection object.
--- @param proc string function name.
--- @param args table function arguments.
---
--- @return table
---   Result of the stored procedure invocation.
-function M.ncall(self, proc, args)
-  return self._call(self, command_keys.call.new, proc, args)
 end
 
 --- Performs an eval operation in the tarantool server. I.e., it
