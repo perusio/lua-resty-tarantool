@@ -10,7 +10,7 @@ description = {
    license = "MIT"
 }
 dependencies = {
-   "lua-messagepack ~> 5";
+   "lua-messagepack ~> 0.5";
 }
 build = {
    type = "builtin",
