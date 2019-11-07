@@ -82,6 +82,9 @@ The socket timeout (receive and send) is 2 seconds (2000 ms).
 \* The option `call_semantics` controls whether the code for the new call
 method (0x0a) or the old one (0x06) is used.
 The old method wraps every result in a table as described [here][binary-protocol].
+**The current default is 'old', but this might change in the future**.
+It is therefore suggested to set it manually to 'old' in projects that rely on
+the old behavior.
 
 [binary-protocol]: https://www.tarantool.io/en/doc/2.2/dev_guide/internals/box_protocol/ 'Tarantool Binary Protocol'
 
