@@ -195,15 +195,12 @@ function M.new(self, params)
   -- Create an object using the defaults.
   -- tarc = tarantool connection.
   local tarc = {
-    host = defaults.host,
-    port = defaults.port,
-    user =  defaults.user,
-    password = defaults.password,
-    socket_timeout = defaults.socket_timeout,
     -- If true it sends a custom header with the tarantool version.
     show_version_header = true,
-    call_semantics = defaults.call_semantics,
   }
+  for key, value in pairs(defaults) do
+	  tarc[key] = value
+  end
   -- Loop over the given parameters and assign the values accordingly.
   if params and type(params) == 'table' then
     for key, value in pairs(params) do
