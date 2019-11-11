@@ -67,8 +67,10 @@ local tar, err = tnt:new({
     user = 'luser',
     password = 'some_password',
     socket_timeout = 2000,
+    call_semantics = 'new' -- can be 'new' or 'old'*
 })
 ```
+
 The above creates a connection object that connects to a tarantool
 server instance running on the loopback in port 3301, for user `luser`
 with password `some password`. See the
@@ -76,6 +78,15 @@ with password `some password`. See the
 for details on how to setup users and assigning privileges to them.
 
 The socket timeout (receive and send) is 2 seconds (2000 ms).
+
+\* The option `call_semantics` controls whether the code for the new call
+method (0x0a) or the old one (0x06) is used.
+The old method wraps every result in a table as described [here][binary-protocol].
+**The current default is 'old', but this might change in the future**.
+It is therefore suggested to set it manually to 'old' in projects that rely on
+the old behavior.
+
+[binary-protocol]: https://www.tarantool.io/en/doc/2.2/dev_guide/internals/box_protocol/ 'Tarantool Binary Protocol'
 
 ### set_timeout
 

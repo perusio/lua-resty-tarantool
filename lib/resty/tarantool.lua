@@ -101,7 +101,12 @@ local command_keys = {
   replace = 0x03,
   update = 0x04,
   delete = 0x05,
-  call = 0x06,
+  call = {
+    -- Old call, wraps each return value in a table
+    old = 0x06,
+    -- Newer call that doesn't wrap values
+    new = 0x0a
+  },
   auth = 0x07,
   eval = 0x08,
   upsert = 0x09,
@@ -162,6 +167,7 @@ local defaults = {
   port = 3301,
   password = '',
   socket_timeout = 5000, -- ms
+  call_semantics = 'old',
 }
 
 -- Lua pattern used to extract the version number from the server
@@ -189,14 +195,12 @@ function M.new(self, params)
   -- Create an object using the defaults.
   -- tarc = tarantool connection.
   local tarc = {
-    host = defaults.host,
-    port = defaults.port,
-    user =  defaults.user,
-    password = defaults.password,
-    socket_timeout = defaults.socket_timeout,
     -- If true it sends a custom header with the tarantool version.
     show_version_header = true,
   }
+  for key, value in pairs(defaults) do
+	  tarc[key] = value
+  end
   -- Loop over the given parameters and assign the values accordingly.
   if params and type(params) == 'table' then
     for key, value in pairs(params) do
@@ -938,6 +942,7 @@ function M.upsert(self, space, key, oplist, new_tuple)
 end
 
 --- Executes a stored procedure (Lua function) in a tarantool server.
+-- Uses the new (0x0a) command, which does not wrap each return value in a table.
 --
 -- @param self table connection object.
 -- @param proc string function name.
@@ -948,7 +953,7 @@ end
 function M.call(self, proc, args)
   -- Issue the request.
   local response, err = request(self,
-                                { [packet_keys.type] = command_keys.call },
+                                { [packet_keys.type] = command_keys.call[self.call_semantics] or error('Incorrect value for "call_semantics" option') },
                                 { [packet_keys.function_name] = proc,
                                   [packet_keys.tuple] = args } )
   -- Handle the error if it occurs.
