@@ -1,5 +1,5 @@
 package = "lua-resty-tarantool"
-version = "scm-2"
+version = "scm-3"
 source = {
    url = "git+ssh://git@github.com/perusio/lua-resty-tarantool"
 }

@@ -219,7 +219,7 @@ function M.new(self, params)
   end
   -- Set the socket timeout.
   if tarc.socket_timeout then
-    tcpsock:settimeout(tarc.tcpsocket_timeout)
+    tcpsock:settimeout(tarc.socket_timeout)
   end
 
   tarc.sock = tcpsock
